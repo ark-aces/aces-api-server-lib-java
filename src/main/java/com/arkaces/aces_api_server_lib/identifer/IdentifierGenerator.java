@@ -1,8 +1,8 @@
-package com.arkaces.aces_api_server_lib;
+package com.arkaces.aces_api_server_lib.identifer;
 
 import java.security.SecureRandom;
 
-public class IdGenerator {
+public class IdentifierGenerator {
 
     private final Integer length = 20;
     private final String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
