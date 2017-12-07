@@ -1,4 +1,4 @@
-package com.arkaces.aces_api_server_lib.health;
+package com.arkaces.aces_server.common.health;
 
 import lombok.Data;
 

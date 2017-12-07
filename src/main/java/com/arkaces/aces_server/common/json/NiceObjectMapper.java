@@ -1,4 +1,4 @@
-package com.arkaces.aces_api_server_lib.json;
+package com.arkaces.aces_server.common.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

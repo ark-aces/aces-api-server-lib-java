@@ -1,4 +1,4 @@
-package com.arkaces.aces_api_server_lib.paging;
+package com.arkaces.aces_server.common.paging;
 
 import lombok.Data;
 

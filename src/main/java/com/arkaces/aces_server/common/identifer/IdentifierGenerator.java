@@ -1,4 +1,4 @@
-package com.arkaces.aces_api_server_lib.identifer;
+package com.arkaces.aces_server.common.identifer;
 
 import java.security.SecureRandom;
 

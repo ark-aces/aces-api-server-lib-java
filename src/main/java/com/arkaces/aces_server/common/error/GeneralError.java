@@ -1,4 +1,4 @@
-package com.arkaces.aces_api_server_lib.error;
+package com.arkaces.aces_server.common.error;
 
 import lombok.Data;
 
