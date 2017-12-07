@@ -6,4 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
+    EventEntity findOneByTransactionId(String transactionId);
+
 }

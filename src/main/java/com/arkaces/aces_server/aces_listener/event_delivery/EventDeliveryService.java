@@ -56,12 +56,15 @@ public class EventDeliveryService {
 
             LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
-            EventEntity eventEntity = new EventEntity();
-            eventEntity.setId(identifierGenerator.generate());
-            eventEntity.setCreatedAt(now);
-            eventEntity.setTransactionId(transactionId);
-            eventEntity.setData(data.toString());
-            eventRepository.save(eventEntity);
+            EventEntity eventEntity = eventRepository.findOneByTransactionId(transactionId);
+            if (eventEntity == null) {
+                eventEntity = new EventEntity();
+                eventEntity.setId(identifierGenerator.generate());
+                eventEntity.setCreatedAt(now);
+                eventEntity.setTransactionId(transactionId);
+                eventEntity.setData(data.toString());
+                eventRepository.save(eventEntity);
+            }
 
             SubscriptionEventEntity subscriptionEventEntity = new SubscriptionEventEntity();
             subscriptionEventEntity.setCreatedAt(now);
