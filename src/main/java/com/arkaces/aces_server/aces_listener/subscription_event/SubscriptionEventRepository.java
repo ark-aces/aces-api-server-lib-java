@@ -5,17 +5,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 public interface SubscriptionEventRepository extends JpaRepository<SubscriptionEventEntity, Long> {
 
     @Query(
         "select se from SubscriptionEventEntity se " +
-        "where se.subscriptionEntity.id = :subscriptionEntityId " +
+        "where se.subscriptionEntity.pid = :pid " +
         "and se.eventEntity.transactionId = :transactionId"
     )
     SubscriptionEventEntity findOne(
-            @Param("subscriptionEntityId") Long subscriptionEntityId,
+            @Param("pid") Long pid,
             @Param("transactionId") String transactionId
     );
+
+    List<SubscriptionEventEntity> findAllByStatus(String status);
 
 }
