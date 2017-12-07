@@ -2,6 +2,8 @@ package com.arkaces.aces_server.aces_listener.subscription;
 
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneOffset;
+
 @Service
 public class SubscriptionMapper {
 
@@ -11,7 +13,7 @@ public class SubscriptionMapper {
         subscription.setId(subscriptionEntity.getId());
         subscription.setCallbackUrl(subscriptionEntity.getCallbackUrl());
         subscription.setMinConfirmations(subscriptionEntity.getMinConfirmations());
-        subscription.setCreatedAt(subscriptionEntity.getCreatedAt().toString());
+        subscription.setCreatedAt(subscriptionEntity.getCreatedAt().atOffset(ZoneOffset.UTC).toString());
 
         return subscription;
     }

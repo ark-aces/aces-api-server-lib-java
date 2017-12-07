@@ -4,7 +4,7 @@ import com.arkaces.aces_server.aces_listener.unsubscribe.UnsubscribeEntity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -13,14 +13,14 @@ import java.util.List;
 public class SubscriptionEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pid;
 
     private String id;
     private String callbackUrl;
     private Integer minConfirmations;
     private String status;
-    private ZonedDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "subscriptionEntity")
     private List<UnsubscribeEntity> unsubscribeEntities;

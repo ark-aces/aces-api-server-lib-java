@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -33,7 +33,7 @@ public class UnsubscribeController {
 
         UnsubscribeEntity unsubscribeEntity = new UnsubscribeEntity();
         unsubscribeEntity.setId(identifierGenerator.generate());
-        unsubscribeEntity.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC));
+        unsubscribeEntity.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
         unsubscribeEntity.setSubscriptionEntity(subscriptionEntity);
         unsubscribeRepository.save(unsubscribeEntity);
 
@@ -42,7 +42,7 @@ public class UnsubscribeController {
 
         Unsubscribe unsubscribe = new Unsubscribe();
         unsubscribe.setId(unsubscribeEntity.getId());
-        unsubscribe.setCreatedAt(unsubscribeEntity.getCreatedAt().toString());
+        unsubscribe.setCreatedAt(unsubscribeEntity.getCreatedAt().atOffset(ZoneOffset.UTC).toString());
 
         return unsubscribe;
     }

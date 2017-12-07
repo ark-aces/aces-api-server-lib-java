@@ -3,7 +3,7 @@ package com.arkaces.aces_server.aces_listener.event;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 public class EventEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pid;
 
     private String id;
@@ -21,6 +21,6 @@ public class EventEntity {
     @Column(columnDefinition="TEXT")
     private String data;
 
-    private ZonedDateTime createdAt;
+    private LocalDateTime createdAt;
 }
 

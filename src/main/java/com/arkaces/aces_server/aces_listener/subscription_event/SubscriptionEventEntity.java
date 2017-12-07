@@ -5,7 +5,7 @@ import com.arkaces.aces_server.aces_listener.subscription.SubscriptionEntity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 public class SubscriptionEventEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pid;
 
     private String status;
@@ -26,5 +26,5 @@ public class SubscriptionEventEntity {
     @OneToOne
     private EventEntity eventEntity;
 
-    private ZonedDateTime createdAt;
+    private LocalDateTime createdAt;
 }

@@ -21,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -53,15 +54,17 @@ public class EventDeliveryService {
             log.info("Creating new subscription event for subscription " + subscriptionEntity.getId() +
                 " and transaction id " + transactionId);
 
+            LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+
             EventEntity eventEntity = new EventEntity();
             eventEntity.setId(identifierGenerator.generate());
-            eventEntity.setCreatedAt(ZonedDateTime.now());
+            eventEntity.setCreatedAt(now);
             eventEntity.setTransactionId(transactionId);
             eventEntity.setData(data.toString());
             eventRepository.save(eventEntity);
 
             SubscriptionEventEntity subscriptionEventEntity = new SubscriptionEventEntity();
-            subscriptionEventEntity.setCreatedAt(ZonedDateTime.now());
+            subscriptionEventEntity.setCreatedAt(now);
             subscriptionEventEntity.setSubscriptionEntity(subscriptionEntity);
             subscriptionEventEntity.setEventEntity(eventEntity);
             subscriptionEventEntity.setStatus(SubscriptionEventStatus.NEW);
@@ -77,12 +80,12 @@ public class EventDeliveryService {
 
         EventEntity eventEntity = subscriptionEventEntity.getEventEntity();
 
-        if (subscriptionEventEntity.getTries() > 10) {
+        if (subscriptionEventEntity.getTries() > 5) {
             log.info("Subscription event " + subscriptionEntity.getId() + " tried too many times - setting to FAILED");
             subscriptionEventEntity.setStatus(SubscriptionEventStatus.FAILED);
 
             // todo: might want to cancel subscriptions less aggressively
-            // Here we cancel a subscription if it fails more than 10 times 1 second apart
+            // Here we cancel a subscription if it fails more than 5 times 1 second apart
             subscriptionEntity.setStatus(SubscriptionStatus.CANCELLED);
             subscriptionRepository.save(subscriptionEntity);
         } else {
