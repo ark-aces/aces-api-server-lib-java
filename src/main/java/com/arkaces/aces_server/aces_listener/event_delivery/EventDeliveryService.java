@@ -22,6 +22,7 @@ import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -35,6 +36,13 @@ public class EventDeliveryService {
     private final SubscriptionRepository subscriptionRepository;
     private final SubscriptionEventRepository subscriptionEventRepository;
     private final EventMapper eventMapper;
+
+    public void saveSubscriptionEvents(String transactionId, JsonNode data) {
+        List<SubscriptionEntity> subscriptionEntities = subscriptionRepository.findAllByStatus(SubscriptionStatus.ACTIVE);
+        for (SubscriptionEntity subscriptionEntity : subscriptionEntities) {
+            saveSubscriptionEvent(subscriptionEntity, transactionId, data);
+        }
+    }
 
     public void saveSubscriptionEvent(SubscriptionEntity subscriptionEntity, String transactionId, JsonNode data) {
         Long subscriptionEntityPid = subscriptionEntity.getPid();
