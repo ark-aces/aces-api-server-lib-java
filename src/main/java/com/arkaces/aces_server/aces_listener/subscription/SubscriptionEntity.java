@@ -1,12 +1,11 @@
 package com.arkaces.aces_server.aces_listener.subscription;
 
+import com.arkaces.aces_server.aces_listener.unsubscribe.UnsubscribeEntity;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,5 +21,8 @@ public class SubscriptionEntity {
     private Integer minConfirmations;
     private String status;
     private ZonedDateTime createdAt;
+
+    @OneToMany(mappedBy = "subscriptionEntity")
+    private List<UnsubscribeEntity> unsubscribeEntities;
 
 }

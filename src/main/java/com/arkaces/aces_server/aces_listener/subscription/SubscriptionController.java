@@ -1,12 +1,12 @@
 package com.arkaces.aces_server.aces_listener.subscription;
 
+import com.arkaces.aces_server.common.error.ErrorCodes;
+import com.arkaces.aces_server.common.error.NotFoundException;
 import com.arkaces.aces_server.common.identifer.IdentifierGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -18,6 +18,7 @@ public class SubscriptionController {
 
     private final IdentifierGenerator identifierGenerator;
     private final SubscriptionRepository subscriptionRepository;
+    private final SubscriptionMapper subscriptionMapper;
 
     @PostMapping("/subscriptions")
     public Subscription postSubscription(@RequestBody CreateSubscriptionRequest createSubscriptionRequest) {
@@ -33,14 +34,17 @@ public class SubscriptionController {
         subscriptionEntity.setStatus(SubscriptionStatus.ACTIVE);
         subscriptionRepository.save(subscriptionEntity);
 
-        Subscription subscription = new Subscription();
-        subscription.setStatus(subscriptionEntity.getStatus());
-        subscription.setId(subscriptionEntity.getId());
-        subscription.setCallbackUrl(subscriptionEntity.getCallbackUrl());
-        subscription.setMinConfirmations(subscriptionEntity.getMinConfirmations());
-        subscription.setCreatedAt(subscriptionEntity.getCreatedAt().toString());
+        return subscriptionMapper.map(subscriptionEntity);
+    }
 
-        return subscription;
+    @GetMapping("/subscriptions/{id}")
+    public Subscription getSubscription(@PathVariable String id) {
+        SubscriptionEntity subscriptionEntity = subscriptionRepository.findOneById(id);
+        if (subscriptionEntity == null) {
+            throw new NotFoundException(ErrorCodes.SUBSCRIPTION_NOT_FOUND, "Subscription not found");
+        }
+
+        return subscriptionMapper.map(subscriptionEntity);
     }
 
 }

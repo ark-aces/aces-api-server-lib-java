@@ -4,6 +4,7 @@ import com.arkaces.aces_server.aces_listener.subscription.SubscriptionEntity;
 import com.arkaces.aces_server.aces_listener.subscription.SubscriptionRepository;
 import com.arkaces.aces_server.aces_listener.subscription.SubscriptionStatus;
 import com.arkaces.aces_server.common.error.NotFoundException;
+import com.arkaces.aces_server.common.identifer.IdentifierGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,18 +20,21 @@ import java.time.ZonedDateTime;
 @Transactional
 public class UnsubscribeController {
 
+    private final IdentifierGenerator identifierGenerator;
     private final SubscriptionRepository subscriptionRepository;
     private final UnsubscribeRepository unsubscribeRepository;
 
-    @PostMapping("/subscription/{subscriptionId}/unsubscribes")
-    public Unsubscribe postUnsubscribe(@PathVariable Long subscriptionId) {
-        SubscriptionEntity subscriptionEntity = subscriptionRepository.findOne(subscriptionId);
+    @PostMapping("/subscriptions/{subscriptionId}/unsubscribes")
+    public Unsubscribe postUnsubscribe(@PathVariable String subscriptionId) {
+        SubscriptionEntity subscriptionEntity = subscriptionRepository.findOneById(subscriptionId);
         if (subscriptionEntity == null) {
             throw new NotFoundException("SubscriptionNotFound", "Subscription not found.");
         }
 
         UnsubscribeEntity unsubscribeEntity = new UnsubscribeEntity();
+        unsubscribeEntity.setId(identifierGenerator.generate());
         unsubscribeEntity.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC));
+        unsubscribeEntity.setSubscriptionEntity(subscriptionEntity);
         unsubscribeRepository.save(unsubscribeEntity);
 
         subscriptionEntity.setStatus(SubscriptionStatus.UNSUBSCRIBED);

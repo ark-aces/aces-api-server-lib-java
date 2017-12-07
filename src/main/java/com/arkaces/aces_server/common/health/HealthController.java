@@ -13,8 +13,4 @@ public class HealthController {
         return health;
     }
 
-    @GetMapping("/error")
-    public String getError() {
-        throw new RuntimeException("Boom!");
-    }
 }

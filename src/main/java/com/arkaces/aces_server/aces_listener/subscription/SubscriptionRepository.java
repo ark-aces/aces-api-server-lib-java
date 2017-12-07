@@ -10,4 +10,6 @@ public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity
 
     List<SubscriptionEntity> findAllByStatus(String status);
 
+    SubscriptionEntity findOneById(String id);
+
 }
