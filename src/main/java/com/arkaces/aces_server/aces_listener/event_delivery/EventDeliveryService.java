@@ -41,7 +41,8 @@ public class EventDeliveryService {
     public void saveSubscriptionEvents(String transactionId, String recipientAddress, JsonNode data) {
         List<SubscriptionEntity> subscriptionEntities = subscriptionRepository.findAllByStatus(SubscriptionStatus.ACTIVE);
         for (SubscriptionEntity subscriptionEntity : subscriptionEntities) {
-            if (subscriptionEntity.getRecipientAddress().equals(recipientAddress)) {
+            if (subscriptionEntity.getRecipientAddress() == null
+                    || subscriptionEntity.getRecipientAddress().equals(recipientAddress)) {
                 saveSubscriptionEvent(subscriptionEntity, transactionId, data);
             }
         }
