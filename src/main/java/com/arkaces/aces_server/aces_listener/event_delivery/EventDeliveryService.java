@@ -38,11 +38,13 @@ public class EventDeliveryService {
     private final SubscriptionEventRepository subscriptionEventRepository;
     private final EventMapper eventMapper;
 
-    public void saveSubscriptionEvents(String transactionId, String recipientAddress, JsonNode data) {
+    public void saveSubscriptionEvents(String transactionId, String recipientAddress, Integer confirmations, JsonNode data) {
         List<SubscriptionEntity> subscriptionEntities = subscriptionRepository.findAllByStatus(SubscriptionStatus.ACTIVE);
         for (SubscriptionEntity subscriptionEntity : subscriptionEntities) {
-            if (subscriptionEntity.getRecipientAddress() == null
-                    || subscriptionEntity.getRecipientAddress().equals(recipientAddress)) {
+            boolean matchesRecipientAddress = subscriptionEntity.getRecipientAddress() == null
+                    || subscriptionEntity.getRecipientAddress().equals(recipientAddress);
+            boolean matchesMinConfirmations = confirmations >= subscriptionEntity.getMinConfirmations();
+            if (matchesRecipientAddress && matchesMinConfirmations) {
                 saveSubscriptionEvent(subscriptionEntity, transactionId, data);
             }
         }
