@@ -38,14 +38,20 @@ public class EventDeliveryService {
     private final SubscriptionEventRepository subscriptionEventRepository;
     private final EventMapper eventMapper;
 
-    public void saveSubscriptionEvents(String transactionId, JsonNode data) {
+    public void saveSubscriptionEvents(String transactionId, String recipientAddress, JsonNode data) {
         List<SubscriptionEntity> subscriptionEntities = subscriptionRepository.findAllByStatus(SubscriptionStatus.ACTIVE);
         for (SubscriptionEntity subscriptionEntity : subscriptionEntities) {
-            saveSubscriptionEvent(subscriptionEntity, transactionId, data);
+            if (subscriptionEntity.getRecipientAddress().equals(recipientAddress)) {
+                saveSubscriptionEvent(subscriptionEntity, transactionId, data);
+            }
         }
     }
 
-    public void saveSubscriptionEvent(SubscriptionEntity subscriptionEntity, String transactionId, JsonNode data) {
+    public void saveSubscriptionEvent(
+            SubscriptionEntity subscriptionEntity,
+            String transactionId,
+            JsonNode data
+    ) {
         Long subscriptionEntityPid = subscriptionEntity.getPid();
 
         SubscriptionEventEntity existingSubscriptionEventEntity

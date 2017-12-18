@@ -6,4 +6,5 @@ import lombok.Data;
 public class CreateSubscriptionRequest {
     private String callbackUrl;
     private Integer minConfirmations;
+    private String recipientAddress;
 }

@@ -19,6 +19,7 @@ public class SubscriptionEntity {
     private String id;
     private String callbackUrl;
     private Integer minConfirmations;
+    private String recipientAddress;
     private String status;
     private LocalDateTime createdAt;
 

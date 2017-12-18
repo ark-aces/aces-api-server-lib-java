@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 
 @RestController
 @Transactional
@@ -31,6 +30,7 @@ public class SubscriptionController {
         subscriptionEntity.setId(identifier);
         subscriptionEntity.setCallbackUrl(createSubscriptionRequest.getCallbackUrl());
         subscriptionEntity.setMinConfirmations(createSubscriptionRequest.getMinConfirmations());
+        subscriptionEntity.setRecipientAddress(createSubscriptionRequest.getRecipientAddress());
         subscriptionEntity.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
         subscriptionEntity.setStatus(SubscriptionStatus.ACTIVE);
         subscriptionRepository.save(subscriptionEntity);

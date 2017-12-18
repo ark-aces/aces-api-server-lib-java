@@ -6,7 +6,7 @@
 
     <groupId>com.arkaces</groupId>
     <artifactId>aces_server_lib</artifactId>
-    <version>5.1.0</version>
+    <version>5.2.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
