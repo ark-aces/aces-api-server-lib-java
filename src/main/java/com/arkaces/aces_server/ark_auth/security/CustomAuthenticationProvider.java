@@ -26,9 +26,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
-        String password = (String) authentication.getCredentials();
+        String apiKey = (String) authentication.getCredentials();
 
-        AccountEntity accountEntity = accountRepository.findOneByStatusAndToken(AccountStatus.ACTIVE, password);
+        AccountEntity accountEntity = accountRepository.findOneByStatusAndApiKey(AccountStatus.ACTIVE, apiKey);
         if (accountEntity == null) {
             throw new BadCredentialsException("Authentication credentials invalid");
         }
@@ -36,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ACCOUNT_USER"));
 
-        return new UsernamePasswordAuthenticationToken(username, password, authorities);
+        return new UsernamePasswordAuthenticationToken(username, apiKey, authorities);
     }
 
     @Override

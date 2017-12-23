@@ -31,7 +31,7 @@ public class AccountController {
 
         String userArkAddress = createAccountRequest.getUserArkAddress();
 
-        String token = apiKeyGenerator.generate();
+        String apiKey = apiKeyGenerator.generate();
 
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setId(identifier);
@@ -40,7 +40,7 @@ public class AccountController {
         accountEntity.setPaymentArkAddress(paymentArkAddress);
         accountEntity.setPaymentArkPassphrase(paymentArkPassphrase);
         accountEntity.setStatus(AccountStatus.PENDING);
-        accountEntity.setApiKey(token);
+        accountEntity.setApiKey(apiKey);
         accountEntity.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
 
         accountRepository.save(accountEntity);

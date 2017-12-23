@@ -19,11 +19,11 @@ import java.util.List;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final String arkAuthorizationServiceArkAddress;
-    private final ArkClient arkAuthorizationArkClient;
-    private final BigDecimal arkAuthorizationMinArkStake;
-    private final BigDecimal arkAuthorizationArkFee;
-    private final ArkClient localArkClient;
+    private final String arkAuthServiceArkAddress;
+    private final ArkClient arkAuthNetworkArkClient;
+    private final BigDecimal arkAuthMinArkStake;
+    private final BigDecimal arkAuthArkFee;
+    private final ArkClient arkAuthLocalArkClient;
 
     public void updateStatus(AccountEntity accountEntity) {
         log.info("Updating API key status for api key " + accountEntity.getId());
@@ -34,7 +34,7 @@ public class AccountService {
             // Attempt verification by checking payment transactions for user ark address
             boolean isVerified = false;
             String paymentArkAddress = accountEntity.getPaymentArkAddress();
-            List<Transaction> transactions = localArkClient.getTransactionByRecipientAddress(paymentArkAddress);
+            List<Transaction> transactions = arkAuthLocalArkClient.getTransactionByRecipientAddress(paymentArkAddress);
             for (Transaction transaction : transactions) {
                 if (transaction.getSenderId().equals(userArkAddress)) {
                     // todo: we should check confirmations so we don't verify for low-confirmation transactions
@@ -47,21 +47,21 @@ public class AccountService {
         }
 
         if (accountEntity.getUserArkAddressVerified()) {
-            AccountBalance accountBalance = localArkClient.getBalance(userArkAddress);
+            AccountBalance accountBalance = arkAuthLocalArkClient.getBalance(userArkAddress);
             BigDecimal userArkAmount = new BigDecimal(accountBalance.getBalance())
                     .setScale(14, BigDecimal.ROUND_UP)
                     .divide(new BigDecimal(ArkConstants.SATOSHIS_PER_ARK), BigDecimal.ROUND_UP);
             accountEntity.setArkStake(userArkAmount);
 
             String paymentArkAddress = accountEntity.getPaymentArkAddress();
-            AccountBalance paymentAccountBalance = localArkClient.getBalance(paymentArkAddress);
+            AccountBalance paymentAccountBalance = arkAuthLocalArkClient.getBalance(paymentArkAddress);
             BigDecimal paymentAccountAmount = new BigDecimal(paymentAccountBalance.getBalance())
                     .setScale(14, BigDecimal.ROUND_UP)
                     .divide(new BigDecimal(ArkConstants.SATOSHIS_PER_ARK), BigDecimal.ROUND_UP);
             accountEntity.setPaymentAccountAmount(paymentAccountAmount);
 
             // if address doesn't have enough ARK stake, inactivate api key
-            if (userArkAmount.compareTo(arkAuthorizationMinArkStake) < 0) {
+            if (userArkAmount.compareTo(arkAuthMinArkStake) < 0) {
                 accountEntity.setStatus(AccountStatus.PENDING);
                 accountEntity.setHasEnoughStake(false);
                 accountEntity.setHasPaidFee(false);
@@ -69,16 +69,16 @@ public class AccountService {
                 accountEntity.setHasEnoughStake(true);
 
                 // charge activation fee
-                if (arkAuthorizationArkFee.compareTo(BigDecimal.ZERO) > 0) {
-                    Long satoshiAmount = arkAuthorizationArkFee
+                if (arkAuthArkFee.compareTo(BigDecimal.ZERO) > 0) {
+                    Long satoshiAmount = arkAuthArkFee
                             .multiply(new BigDecimal(ArkConstants.SATOSHIS_PER_ARK))
                             .toBigIntegerExact()
                             .longValue();
                     // todo: what happens when payment wallet doesn't have enough funds
                     // todo: save fee charge transaction information to database
-                    String transactionId = arkAuthorizationArkClient
+                    String transactionId = arkAuthNetworkArkClient
                             .createTransaction(
-                                    arkAuthorizationServiceArkAddress,
+                                    arkAuthServiceArkAddress,
                                     satoshiAmount,
                                     "ACES API key activation fee",
                                     accountEntity.getPaymentArkPassphrase()
