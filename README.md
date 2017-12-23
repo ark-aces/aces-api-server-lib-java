@@ -34,6 +34,16 @@ public class ApplicationConfig {
 }
 ```
 
+Add the following properties to your `application.yml` config:
+
+```yaml
+serverInfo:
+  name: "MyListener"
+  description: "My custom ACES Listener server."
+  version: "1.0.0"
+  websiteUrl: "https://domain.com/my-listener-website"
+```
+
 ### ACES Service
 
 Import Spring components into your Spring application for ACES Service web applications:
