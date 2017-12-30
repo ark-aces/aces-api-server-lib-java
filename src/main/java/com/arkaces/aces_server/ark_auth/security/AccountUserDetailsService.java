@@ -21,12 +21,13 @@ public class AccountUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Account account;
         AccountEntity accountEntity = accountRepository.findOneById(username);
         if (accountEntity == null) {
-            return null;
+            throw new UsernameNotFoundException("User not found");
+        } else {
+            account = accountMapper.map(accountEntity);
         }
-        
-        Account account = accountMapper.map(accountEntity);
         
         return new com.arkaces.aces_server.ark_auth.security.User(
             account.getId(),

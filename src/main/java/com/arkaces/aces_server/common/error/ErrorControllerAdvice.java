@@ -2,6 +2,8 @@ package com.arkaces.aces_server.common.error;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -46,5 +48,30 @@ public class ErrorControllerAdvice {
 
         return generalError;
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public GeneralError handleBadRequest(Exception exception) {
+        log.error("Bad Request exception thrown", exception);
+
+        GeneralError generalError = new GeneralError();
+        generalError.setCode(ErrorCodes.BAD_REQUEST);
+        generalError.setMessage("The request body is invalid.");
+
+        return generalError;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public GeneralError handleMethodNotAllowed(Exception exception) {
+        log.error("Method not allowed exception thrown", exception);
+
+        GeneralError generalError = new GeneralError();
+        generalError.setCode(ErrorCodes.BAD_REQUEST);
+        generalError.setMessage("The HTTP method is not allowed for this endpoint.");
+
+        return generalError;
+    }
+    
 
 }

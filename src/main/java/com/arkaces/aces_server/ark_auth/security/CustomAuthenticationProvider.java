@@ -5,6 +5,7 @@ import com.arkaces.aces_server.ark_auth.AccountRepository;
 import com.arkaces.aces_server.ark_auth.AccountService;
 import com.arkaces.aces_server.ark_auth.AccountStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,6 +21,7 @@ import java.util.Collection;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     
     private final AccountRepository accountRepository;
@@ -27,25 +29,26 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = authentication.getName();
+        log.info("authentication entry point: " + authentication.toString());
         String apiKey = (String) authentication.getCredentials();
-
         AccountEntity accountEntity = accountRepository.findOneByApiKey(apiKey);
         if (accountEntity == null) {
-            throw new BadCredentialsException("Authentication credentials invalid");
+            throw new BadCredentialsException("Bad Credentials");
         }
         
+        // try to activate the api key if it's inactive
         if (! accountEntity.getStatus().equals(AccountStatus.ACTIVE)) {
             accountService.updateStatus(accountEntity);
         }
         
         if (! accountEntity.getStatus().equals(AccountStatus.ACTIVE)) {
-            throw new BadCredentialsException("Account API Key is not ACTIVE. Ensure user ArK address " +
-                "has sufficient ark stake and payment Ark address has sufficient funds to cover activation fee.");
+            throw new InactiveApiKeyException("Inactive API Key");
         }
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ACCOUNT_USER"));
+
+        String username = accountEntity.getId();
 
         return new UsernamePasswordAuthenticationToken(username, apiKey, authorities);
     }

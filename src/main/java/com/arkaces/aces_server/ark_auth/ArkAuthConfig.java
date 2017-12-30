@@ -31,18 +31,23 @@ public class ArkAuthConfig {
 
     @Bean
     public ArkClient arkAuthArkClient(Environment environment) {
-        ArkNetworkFactory arkNetworkFactory = new ArkNetworkFactory();
-        String arkNetworkConfigPath = environment.getProperty("arkAuth.arkNetworkConfigPath");
-        ArkNetwork arkNetwork = arkNetworkFactory.createFromYml(arkNetworkConfigPath);
+        if (environment.containsProperty("arkAuth.arkNetworkConfigPath")) {
+            String arkNetworkConfigPath = environment.getProperty("arkAuth.arkNetworkConfigPath");
 
-        HttpArkClientFactory httpArkClientFactory = new HttpArkClientFactory();
+            ArkNetworkFactory arkNetworkFactory = new ArkNetworkFactory();
+            ArkNetwork arkNetwork = arkNetworkFactory.createFromYml(arkNetworkConfigPath);
 
-        return httpArkClientFactory.create(arkNetwork);
+            HttpArkClientFactory httpArkClientFactory = new HttpArkClientFactory();
+
+            return httpArkClientFactory.create(arkNetwork);
+        } else {
+            return null;
+        }
     }
 
     @Bean
     public String arkAuthServiceArkAddress(Environment environment) {
-        return environment.getProperty("arkAuth.serviceArkAddress");
+        return environment.getProperty("arkAuth.serviceArkAddress", "");
     }
 
     @Bean
