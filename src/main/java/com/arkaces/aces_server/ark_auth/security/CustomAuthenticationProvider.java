@@ -2,6 +2,7 @@ package com.arkaces.aces_server.ark_auth.security;
 
 import com.arkaces.aces_server.ark_auth.AccountEntity;
 import com.arkaces.aces_server.ark_auth.AccountRepository;
+import com.arkaces.aces_server.ark_auth.AccountService;
 import com.arkaces.aces_server.ark_auth.AccountStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,25 @@ import java.util.Collection;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     
     private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String apiKey = (String) authentication.getCredentials();
 
-        AccountEntity accountEntity = accountRepository.findOneByStatusAndApiKey(AccountStatus.ACTIVE, apiKey);
+        AccountEntity accountEntity = accountRepository.findOneByApiKey(apiKey);
         if (accountEntity == null) {
             throw new BadCredentialsException("Authentication credentials invalid");
+        }
+        
+        if (! accountEntity.getStatus().equals(AccountStatus.ACTIVE)) {
+            accountService.updateStatus(accountEntity);
+        }
+        
+        if (! accountEntity.getStatus().equals(AccountStatus.ACTIVE)) {
+            throw new BadCredentialsException("Account API Key is not ACTIVE. Ensure user ArK address " +
+                "has sufficient ark stake and payment Ark address has sufficient funds to cover activation fee.");
         }
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();

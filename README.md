@@ -79,13 +79,8 @@ You must add the following to your application config:
 
 ```yaml
 arkAuth:
-  # Ark Network to use for account lookups
-  localArkNetwork:
-    name: "localnet"
-  
-  # Ark Network to use for transaction broadcasts
-  arkNetwork:
-    name: "mainnet"
+  # Ark Network YML config path for bootstraping the ark network client
+  arkNetworkConfigPath: "ark_auth/ark_network_config/localnet.yml"
   
   # The address that fees are sent to
   serviceArkAddress: "ARNJJruY6RcuYCXcwWsu4bx9kyZtntqeAx"
@@ -97,10 +92,6 @@ arkAuth:
   # API key active
   arkFee: "1.00"
 ```
-
-For each ark network name, you must include a network config
-file under `ark-network-config/{networkName}.yml` (See example
-configurations in [src/main/resources/ark_auth/](src/main/resources/ark_auth/))
 
 Users can obtain an API Key by posting to the `/apiKeys` endpoint:
 

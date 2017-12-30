@@ -3,6 +3,7 @@ package com.arkaces.aces_server.ark_auth.security;
 import com.arkaces.aces_server.common.error.ErrorCodes;
 import com.arkaces.aces_server.common.error.GeneralError;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -16,11 +17,11 @@ import java.io.IOException;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
+    private final ObjectMapper objectMapper;
+    
     @Override
     public void commence(
             HttpServletRequest request,

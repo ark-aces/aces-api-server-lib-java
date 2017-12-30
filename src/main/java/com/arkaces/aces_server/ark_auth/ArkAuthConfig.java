@@ -30,21 +30,10 @@ public class ArkAuthConfig {
     }
 
     @Bean
-    public ArkClient arkAuthLocalArkClient(Environment environment) {
+    public ArkClient arkAuthArkClient(Environment environment) {
         ArkNetworkFactory arkNetworkFactory = new ArkNetworkFactory();
-        String arkNetworkName = environment.getProperty("arkAuth.localArkNetwork.name");
-        ArkNetwork arkNetwork = arkNetworkFactory.createFromYml("ark-network-config/" + arkNetworkName + ".yml");
-
-        HttpArkClientFactory httpArkClientFactory = new HttpArkClientFactory();
-
-        return httpArkClientFactory.create(arkNetwork);
-    }
-
-    @Bean
-    public ArkClient arkAuthNetworkArkClient(Environment environment) {
-        ArkNetworkFactory arkNetworkFactory = new ArkNetworkFactory();
-        String arkNetworkName = environment.getProperty("arkAuth.arkNetwork.name");
-        ArkNetwork arkNetwork = arkNetworkFactory.createFromYml("ark-network-config/" + arkNetworkName + ".yml");
+        String arkNetworkConfigPath = environment.getProperty("arkAuth.arkNetworkConfigPath");
+        ArkNetwork arkNetwork = arkNetworkFactory.createFromYml(arkNetworkConfigPath);
 
         HttpArkClientFactory httpArkClientFactory = new HttpArkClientFactory();
 

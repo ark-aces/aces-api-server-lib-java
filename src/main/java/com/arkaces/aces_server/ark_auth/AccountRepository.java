@@ -8,7 +8,7 @@ import java.util.List;
 @Transactional
 public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 
-    AccountEntity findOneByStatusAndApiKey(String status, String apiKey);
+    AccountEntity findOneByApiKey(String apiKey);
 
     List<AccountEntity> findAllByStatusIn(List<String> statusList);
     
