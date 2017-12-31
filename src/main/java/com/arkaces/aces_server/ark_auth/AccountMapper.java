@@ -16,6 +16,12 @@ public class AccountMapper {
         account.setPaymentArkAddress(accountEntity.getPaymentArkAddress());
         account.setCreatedAt(accountEntity.getCreatedAt().atOffset(ZoneOffset.UTC).toString());
 
+        account.setHasEnoughStake(accountEntity.getHasEnoughStake());
+        account.setHasPaidFee(accountEntity.getHasPaidFee());
+        account.setUserArkAddressVerified(accountEntity.getUserArkAddressVerified());
+        account.setArkStake(accountEntity.getArkStake());
+        account.setPaymentAccountAmount(accountEntity.getPaymentAccountAmount());
+        
         return account;
     }
 }

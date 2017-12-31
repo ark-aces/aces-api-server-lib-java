@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -39,6 +40,11 @@ public class AccountController {
         accountEntity.setUserArkAddressVerified(false);
         accountEntity.setPaymentArkAddress(paymentArkAddress);
         accountEntity.setPaymentArkPassphrase(paymentArkPassphrase);
+        accountEntity.setHasEnoughStake(false);
+        accountEntity.setHasPaidFee(false);
+        accountEntity.setUserArkAddressVerified(false);
+        accountEntity.setArkStake(new BigDecimal("0"));
+        accountEntity.setPaymentAccountAmount(new BigDecimal("0"));
         accountEntity.setStatus(AccountStatus.PENDING);
         accountEntity.setApiKey(apiKey);
         accountEntity.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));

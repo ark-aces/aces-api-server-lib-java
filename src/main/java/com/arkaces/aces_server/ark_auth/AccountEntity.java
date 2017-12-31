@@ -17,6 +17,7 @@ public class AccountEntity {
 
     private String id;
 
+    // todo: store bcrypt hash of api key
     private String apiKey;
 
     private String userArkAddress;
@@ -25,9 +26,8 @@ public class AccountEntity {
 
     private String paymentArkAddress;
 
+    // todo: store account password encrypted
     private String paymentArkPassphrase;
-
-    private LocalDateTime nextChargeAt;
 
     private String status;
 

@@ -19,7 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final Environment environment;
-    private final AccountUserDetailsService accountUserDetailsService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAuthenticationProvider customAuthenticationProvider;
     
@@ -31,14 +30,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         if (environment.getProperty("arkAuth.requireAuth", Boolean.class, false)) {
             log.info("arkAuth requireAuth=true, enabling basic auth security");
             http
-                .userDetailsService(accountUserDetailsService)
-                .httpBasic()
-                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.POST, "/accounts").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/public/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic()
+                .authenticationEntryPoint(customAuthenticationEntryPoint);
         } else {
             log.info("arkAuth requireAuth=false, disabling basic auth security");
             http.authorizeRequests()
@@ -48,9 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder
-            .authenticationProvider(customAuthenticationProvider)
-            .userDetailsService(accountUserDetailsService);
+        builder.authenticationProvider(customAuthenticationProvider);
     }
   
 }
