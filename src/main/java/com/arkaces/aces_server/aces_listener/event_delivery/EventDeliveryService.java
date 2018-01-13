@@ -1,8 +1,8 @@
 package com.arkaces.aces_server.aces_listener.event_delivery;
 
-import com.arkaces.aces_server.aces_listener.event.Event;
 import com.arkaces.aces_server.aces_listener.event.EventEntity;
-import com.arkaces.aces_server.aces_listener.event.EventMapper;
+import com.arkaces.aces_server.aces_listener.event.EventPayload;
+import com.arkaces.aces_server.aces_listener.event.EventPayloadMapper;
 import com.arkaces.aces_server.aces_listener.event.EventRepository;
 import com.arkaces.aces_server.aces_listener.subscription.SubscriptionEntity;
 import com.arkaces.aces_server.aces_listener.subscription.SubscriptionRepository;
@@ -36,7 +36,7 @@ public class EventDeliveryService {
     private final EventRepository eventRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final SubscriptionEventRepository subscriptionEventRepository;
-    private final EventMapper eventMapper;
+    private final EventPayloadMapper eventPayloadMapper;
 
     public void saveSubscriptionEvents(String transactionId, String recipientAddress, Integer confirmations, JsonNode data) {
         List<SubscriptionEntity> subscriptionEntities = subscriptionRepository.findAllByStatus(SubscriptionStatus.ACTIVE);
@@ -106,12 +106,12 @@ public class EventDeliveryService {
             log.info("Trying to send subscription event " + subscriptionEventEntity.getPid() + " (try "
                     + subscriptionEventEntity.getTries() + ")");
 
-            Event event = eventMapper.map(eventEntity);
+            EventPayload eventPayload = eventPayloadMapper.map(subscriptionEntity, eventEntity);
             String callbackUrl = subscriptionEntity.getCallbackUrl();
             try {
-                ResponseEntity<String> response = callbackRestTemplate.postForEntity(callbackUrl, event, String.class);
+                ResponseEntity<String> response = callbackRestTemplate.postForEntity(callbackUrl, eventPayload, String.class);
                 if (response.getStatusCode().is2xxSuccessful()) {
-                    log.info("Delivered event " + event.getId() + " to subscriber " + subscriptionEntity.getId());
+                    log.info("Delivered event " + eventPayload.getId() + " to subscriber " + subscriptionEntity.getId());
                     subscriptionEventEntity.setStatus(SubscriptionEventStatus.DELIVERED);
                     subscriptionEventRepository.save(subscriptionEventEntity);
                 } else {

@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 
 @Data
-public class Event {
+public class EventPayload {
     private String id;
+    private String subscriptionId;
     private String transactionId;
     private JsonNode data;
     private String createdAt;

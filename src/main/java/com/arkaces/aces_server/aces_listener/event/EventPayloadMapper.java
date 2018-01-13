@@ -1,5 +1,6 @@
 package com.arkaces.aces_server.aces_listener.event;
 
+import com.arkaces.aces_server.aces_listener.subscription.SubscriptionEntity;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +13,11 @@ import java.time.ZonedDateTime;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class EventMapper {
+public class EventPayloadMapper {
 
     private final ObjectMapper objectMapper;
 
-    public Event map(EventEntity eventEntity) {
+    public EventPayload map(SubscriptionEntity subscriptionEntity, EventEntity eventEntity) {
         JsonNode data;
         try {
             data = objectMapper.readTree(eventEntity.getData());
@@ -24,12 +25,14 @@ public class EventMapper {
             throw new RuntimeException("Failed to parse event data", e);
         }
 
-        Event event = new Event();
-        event.setId(eventEntity.getId());
-        event.setTransactionId(eventEntity.getTransactionId());
-        event.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC).toString());
-        event.setData(data);
+        EventPayload eventPayload = new EventPayload();
+        eventPayload.setId(eventEntity.getId());
+        eventPayload.setTransactionId(eventEntity.getTransactionId());
+        eventPayload.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC).toString());
+        eventPayload.setData(data);
+        
+        eventPayload.setSubscriptionId(subscriptionEntity.getId());
 
-        return event;
+        return eventPayload;
     }
 }
