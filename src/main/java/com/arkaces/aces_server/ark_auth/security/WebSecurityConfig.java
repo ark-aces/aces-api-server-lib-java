@@ -26,7 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        
+
+        // disable for H2 console https://stackoverflow.com/questions/40165915/why-does-the-h2-console-in-spring-boot-show-a-blank-screen-after-logging-in
+        http.headers().frameOptions().disable();
+
         if (environment.getProperty("arkAuth.requireAuth", Boolean.class, false)) {
             log.info("arkAuth requireAuth=true, enabling basic auth security");
             http
