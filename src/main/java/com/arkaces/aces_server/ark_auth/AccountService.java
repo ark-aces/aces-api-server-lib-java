@@ -85,7 +85,8 @@ public class AccountService {
                         arkAuthServiceArkAddress,
                         satoshiAmount,
                         "ACES API key activation fee " + LocalDateTime.now().toString(),
-                        accountEntity.getPaymentArkPassphrase()
+                        accountEntity.getPaymentArkPassphrase(),
+                        10
                     );
 
                 // todo: what happens when payment wallet doesn't have enough funds
