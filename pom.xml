@@ -67,7 +67,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>ark-java-client</groupId>
+            <groupId>com.arkaces</groupId>
             <artifactId>ark-java-client</artifactId>
             <version>0.6.0</version>
         </dependency>
