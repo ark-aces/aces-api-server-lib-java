@@ -4,12 +4,6 @@ This is a library for implementing ACES Listener and ACES Service web servers
 using Java and Spring Boot.
 
 
-## Installation
-
-```
-mvn install
-```
-
 ## Usage
 
 Add the following to your `pom.xml` dependencies:
