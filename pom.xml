@@ -34,6 +34,10 @@
             <id>ark-java</id>
             <url>http://dl.bintray.com/arkecosystem/ark-java</url>
         </repository>
+        <repository>
+            <id>bintray-ark-aces-aces-maven</id>
+            <url>https://dl.bintray.com/ark-aces/aces-maven</url>
+        </repository>
     </repositories>
 
     <dependencies>
