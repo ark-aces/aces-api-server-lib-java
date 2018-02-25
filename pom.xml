@@ -8,6 +8,14 @@
     <artifactId>aces_server_lib</artifactId>
     <version>5.6.0</version>
 
+    <distributionManagement>
+        <repository>
+            <id>bintray-ark-aces-aces-maven</id>
+            <name>ark-aces-aces-maven</name>
+            <url>https://api.bintray.com/maven/ark-aces/aces-maven/aces-server-lib-java/;publish=1</url>
+        </repository>
+    </distributionManagement>
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

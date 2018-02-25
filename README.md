@@ -15,6 +15,12 @@ mvn install
 Add the following to your `pom.xml` dependencies:
 
 ```xml
+<repository>
+    <id>bintray-ark-aces-aces-maven</id>
+    <url>https://dl.bintray.com/ark-aces/aces-maven</url>
+</repository>
+```
+```
 <dependency>
     <groupId>com.arkaces</groupId>
     <artifactId>aces_server_lib</artifactId>
