@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @RestController
 @Transactional
@@ -46,6 +47,22 @@ public class SubscriptionController {
         }
 
         return subscriptionMapper.map(subscriptionEntity);
+    }
+
+    @PostMapping("/subscriptions/{id}/resubscribes")
+    public Resubscribe postResubscribe(@PathVariable String id) {
+        SubscriptionEntity subscriptionEntity = subscriptionRepository.findOneById(id);
+        if (subscriptionEntity == null) {
+            throw new NotFoundException(ErrorCodes.SUBSCRIPTION_NOT_FOUND, "Subscription not found");
+        }
+
+        subscriptionEntity.setStatus(SubscriptionStatus.ACTIVE);
+        subscriptionRepository.save(subscriptionEntity);
+
+        Resubscribe resubscribe = new Resubscribe();
+        resubscribe.setCreatedAt(LocalDateTime.now().atOffset(ZoneOffset.UTC).toString());
+
+        return resubscribe;
     }
 
 }

@@ -6,7 +6,7 @@
 
     <groupId>com.arkaces</groupId>
     <artifactId>aces_server_lib</artifactId>
-    <version>5.7.0</version>
+    <version>5.8.0</version>
 
     <distributionManagement>
         <repository>
