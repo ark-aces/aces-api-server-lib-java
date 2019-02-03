@@ -6,7 +6,7 @@
 
     <groupId>com.arkaces</groupId>
     <artifactId>aces_server_lib</artifactId>
-    <version>5.10.0</version>
+    <version>5.11.0</version>
 
     <distributionManagement>
         <repository>
@@ -30,10 +30,6 @@
     </properties>
 
     <repositories>
-        <repository>
-            <id>ark-java</id>
-            <url>http://dl.bintray.com/arkecosystem/ark-java</url>
-        </repository>
         <repository>
             <id>bintray-ark-aces-aces-maven</id>
             <url>https://dl.bintray.com/ark-aces/aces-maven</url>
@@ -63,17 +59,6 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>2.4.13</version>
-        </dependency>
-        <dependency>
-            <groupId>io.ark.lite</groupId>
-            <artifactId>client</artifactId>
-            <version>0.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.arkaces</groupId>
-            <artifactId>ark-java-client</artifactId>
-            <version>0.10.0</version>
         </dependency>
     </dependencies>
 

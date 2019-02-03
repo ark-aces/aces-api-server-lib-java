@@ -18,7 +18,7 @@ Add the following to your `pom.xml` dependencies:
 <dependency>
     <groupId>com.arkaces</groupId>
     <artifactId>aces_server_lib</artifactId>
-    <version>5.10.0</version>
+    <version>5.11.0</version>
 </dependency>
 ```
 
